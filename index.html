@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZEek AI Signal Bot V4</title>
+<style>
+:root{color-scheme:dark;--bg:#030817;--panel:#071126;--border:#26334d;--muted:#9aa8c0;--text:#eef4ff;--green:#24d17e;--red:#ff5969;--yellow:#ffd46a}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#030817,#07152b);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);padding:16px}
+.wrap{max-width:950px;margin:auto}.head{display:flex;align-items:center;gap:13px;margin:10px 0 22px}.logo{width:60px;height:60px;border-radius:17px;background:linear-gradient(140deg,#003b35,#08275e);display:grid;place-items:center;font-size:29px;font-weight:900}.head h1{font-size:24px;margin:0}.head p{color:var(--muted);margin:5px 0}.badge{margin-left:auto;border:1px solid var(--border);padding:9px 12px;border-radius:30px;color:var(--yellow);font-size:11px}
+.panel{background:rgba(3,10,26,.94);border:1px solid var(--border);border-radius:20px;padding:18px;margin:15px 0}.panel h2{font-size:19px;margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field label{display:block;color:var(--muted);font-size:13px;margin:0 0 7px}.field input,.field select{width:100%;background:#202b3d;color:var(--text);border:1px solid #3b4860;border-radius:11px;padding:13px;font:inherit;min-width:0}.full{grid-column:1/-1}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.btn{border:0;border-radius:12px;padding:13px 17px;font-weight:800;font-size:14px;cursor:pointer}.primary{background:#087b20;color:white}.secondary{background:#24334b;color:white;border:1px solid #3b4860}.warning{background:#1c1207;border:1px solid #5b4322;color:#ffe7a4;border-radius:13px;padding:13px;line-height:1.55;margin-top:14px;font-size:13px}.result{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid var(--border);border-radius:15px;padding:16px}.signal{font-size:33px;font-weight:900}.call{color:var(--green)}.put{color:var(--red)}.none{color:var(--yellow)}.muted{color:var(--muted);line-height:1.5}.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}.check{border:1px solid var(--border);padding:10px;border-radius:11px;font-size:13px}.dot{color:var(--green)}.bad{color:var(--red)}.small{font-size:12px;color:var(--muted)}.history{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}.history td,.history th{text-align:left;padding:8px;border-bottom:1px solid var(--border)}.history th{color:var(--muted)}@media(max-width:600px){body{padding:10px}.grid,.checks{grid-template-columns:1fr}.full{grid-column:auto}.badge{display:none}.result{align-items:flex-start;flex-direction:column}.head h1{font-size:21px}}
+</style></head>
+<body><main class="wrap">
+<header class="head"><div class="logo">Z</div><div><h1>ZEek AI Signal Bot V4</h1><p>Forex live-data test · M1 · Rule-based signals</p></div><div class="badge">LIVE FEED TEST<br>NO AUTO TRADES</div></header>
+<section class="panel"><h2>Live Forex scanner</h2>
+<div class="grid">
+<div class="field"><label for="asset">Forex asset</label><select id="asset"><option value="EUR/USD">EUR/USD</option><option value="AUD/CHF">AUD/CHF</option><option value="GBP/USD">GBP/USD</option><option value="AUD/USD">AUD/USD</option><option value="USD/JPY">USD/JPY</option><option value="GBP/JPY">GBP/JPY</option><option value="EUR/GBP">EUR/GBP</option></select></div>
+<div class="field"><label for="interval">Candle interval</label><select id="interval"><option value="1min">1 minute (M1)</option><option value="5min">5 minutes</option><option value="15min">15 minutes</option></select></div>
+<div class="field"><label for="minscore">Minimum confirmations</label><select id="minscore"><option value="4">4 of 5</option><option value="5">5 of 5</option></select></div>
+<div class="field"><label for="sound">Sound alert</label><select id="sound"><option value="on">On</option><option value="off">Off</option></select></div>
+</div>
+<div class="buttons"><button class="btn primary" id="fetch">Fetch latest candles & analyze</button><button class="btn secondary" id="demo">Show demo example</button></div>
+<div class="warning"><b>Data limitations:</b> Live regular-Forex data is requested through a Netlify server function using your Twelve Data API key stored as a server-side environment variable. API plan limits, symbol access, or provider outages may prevent updates. This is not an IQ Option connection. OTC prices are not supported by this Forex feed.</div>
+<p id="status" class="muted">Status: waiting for you to request data.</p>
+</section>
+<section class="panel"><h2>Latest result</h2><div class="result"><div><div class="small">SIGNAL</div><div id="signal" class="signal none">NO TRADE</div><div id="reason" class="muted">Fetch actual candles to calculate indicators.</div></div><div><div class="small">SETUP SCORE</div><div id="score" style="font-size:27px;font-weight:900">0/5</div><div class="small">Not a win probability</div></div></div><div id="checks" class="checks"></div><p class="muted" id="meta"></p></section>
+<section class="panel"><h2>Recent market candles</h2><div id="quotes" class="muted">No market data loaded.</div></section>
+<section class="panel"><h2>Local signal history</h2><p class="muted">Saved in this browser only; it is not proof of profitability.</p><table class="history"><thead><tr><th>Time</th><th>Asset</th><th>Signal</th><th>Score</th></tr></thead><tbody id="history"><tr><td colspan="4">No results yet.</td></tr></tbody></table></section>
+<footer class="small">ZEek AI Signal Bot V4 · Educational only · No guaranteed predictions · No automated trading.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let lastSignal=null;
+function ema(vals,p){let k=2/(p+1),out=vals[0];for(let i=1;i<vals.length;i++)out=vals[i]*k+out*(1-k);return out}
+function rsi(vals,p=14){if(vals.length<p+1)return null;let gain=0,loss=0;for(let i=vals.length-p;i<vals.length;i++){let d=vals[i]-vals[i-1];if(d>0)gain+=d;else loss-=d}if(loss===0)return 100;return 100-100/(1+(gain/p)/(loss/p))}
+function macdDirection(vals){if(vals.length<35)return 'flat';let fast=ema(vals.slice(-35),12),slow=ema(vals.slice(-35),26);let prior=ema(vals.slice(-36,-1),12)-ema(vals.slice(-36,-1),26);let cur=fast-slow;return cur>0&&cur>prior?'bull':cur<0&&cur<prior?'bear':'flat'}
+function beep(){if($('sound').value!=='on')return;try{let C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=760;g.gain.value=.05;o.start();o.stop(c.currentTime+.2)}catch(e){}}
+function renderHistory(){let a=JSON.parse(localStorage.getItem('zeekV4history')||'[]');$('history').innerHTML=a.length?a.map(x=>`<tr><td>${x.time}</td><td>${x.asset}</td><td class="${x.signal==='CALL'?'call':x.signal==='PUT'?'put':'none'}">${x.signal}</td><td>${x.score}/5</td></tr>`).join(''):'<tr><td colspan="4">No results yet.</td></tr>'}
+function analyze(data){let candles=data.values||[];if(candles.length<35)throw Error('Provider returned fewer than 35 candles; more data is needed for reliable indicator calculation.');
+let closes=candles.map(x=>Number(x.close)).reverse();if(closes.some(x=>!Number.isFinite(x)))throw Error('Invalid close prices received.');
+let rv=rsi(closes),e50=ema(closes.slice(-Math.min(50,closes.length)),Math.min(50,closes.length)),e200=ema(closes,Math.min(200,closes.length));
+let mac=macdDirection(closes),trend=e50>e200?'bull':e50<e200?'bear':'flat';
+let last=candles[0],prev=candles[1],candle=Number(last.close)>Number(last.open)?'bull':Number(last.close)<Number(last.open)?'bear':'flat';
+let bull=[trend==='bull',mac==='bull',rv>=50&&rv<70,candle==='bull',Number(last.close)>Number(prev.close)];
+let bear=[trend==='bear',mac==='bear',rv<=50&&rv>30,candle==='bear',Number(last.close)<Number(prev.close)];
+let b=bull.filter(Boolean).length,s=bear.filter(Boolean).length,min=Number($('minscore').value),signal='NO TRADE',cls='none';
+if(b>=min&&b>s){signal='CALL';cls='call'}else if(s>=min&&s>b){signal='PUT';cls='put'}
+$('signal').textContent=signal;$('signal').className='signal '+cls;$('score').textContent=Math.max(b,s)+'/5';
+$('reason').textContent=signal==='CALL'?'Bullish indicator rules aligned; verify provider and chart.':signal==='PUT'?'Bearish indicator rules aligned; verify provider and chart.':'Conditions are mixed or below threshold; no signal.';
+let names=['EMA trend','MACD direction','RSI range','Latest closed candle direction','Last close vs previous close'];let arr=signal==='CALL'?bull:signal==='PUT'?bear:names.map((_,i)=>bull[i]||bear[i]);
+$('checks').innerHTML=arr.map((v,i)=>`<div class="check"><span class="${v?'dot':'bad'}">${v?'●':'○'}</span> ${names[i]}</div>`).join('');
+$('meta').textContent=`${data.meta?.symbol||$('asset').value} · ${data.meta?.interval||$('interval').value} · Last candle: ${last.datetime||'provider time unavailable'} · RSI(14): ${rv.toFixed(2)} · EMA50: ${e50.toPrecision(7)} · EMA200: ${e200.toPrecision(7)} · MACD direction: ${mac}`;
+$('quotes').innerHTML='<div class="small">Newest candles (provider order)</div><table class="history"><thead><tr><th>Time</th><th>Open</th><th>High</th><th>Low</th><th>Close</th></tr></thead><tbody>'+candles.slice(0,8).map(x=>`<tr><td>${x.datetime||''}</td><td>${x.open}</td><td>${x.high}</td><td>${x.low}</td><td>${x.close}</td></tr>`).join('')+'</tbody></table>';
+$('status').textContent='Data received from provider at '+new Date().toLocaleString()+'. Check provider timestamps and plan limits.';
+let hist=JSON.parse(localStorage.getItem('zeekV4history')||'[]');hist.unshift({time:new Date().toLocaleTimeString(),asset:$('asset').value,signal,score:Math.max(b,s)});localStorage.setItem('zeekV4history',JSON.stringify(hist.slice(0,20)));renderHistory();
+if(signal!=='NO TRADE'&&signal!==lastSignal)beep();lastSignal=signal;
+}
+async function fetchData(){ $('status').textContent='Requesting latest candles…';$('fetch').disabled=true;try{let q=new URLSearchParams({symbol:$('asset').value,interval:$('interval').value});let res=await fetch('/.netlify/functions/forex?'+q.toString());let j=await res.json();if(!res.ok)throw Error(j.error||'Market data request failed.');if(j.status==='error'||!Array.isArray(j.values))throw Error(j.message||j.error||'Unexpected provider response.');$('status').textContent='Data downloaded. Calculating indicators…';analyze(j)}catch(e){$('status').textContent='Could not load live data: '+e.message+' — confirm the server function is deployed, TWELVE_DATA_API_KEY is set in Netlify, and your API plan supports this symbol/interval.'}finally{$('fetch').disabled=false}}
+$('fetch').addEventListener('click',fetchData);
+$('demo').addEventListener('click',()=>{$('signal').textContent='DEMO ONLY';$('signal').className='signal none';$('score').textContent='—';$('reason').textContent='No real provider data was analyzed. Do not trade from this demo.';$('checks').innerHTML='';$('meta').textContent='Demo example only; no market feed was used.';$('status').textContent='Demo mode; no live data request made.'});
+renderHistory();
+</script></body></html>
